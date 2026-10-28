@@ -25,13 +25,14 @@
     --c-body: #7c3aed;
     --c-event: #c2410c;
     --radius: 8px;
-    --sidebar-w: 688px;
+    --sidebar-w: clamp(340px, 40vw, 688px);   /* 넓은 화면 40%, 최대 688px */
     --font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
     --shadow-canvas: 0 8px 40px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
+body { height: var(--app-h, 100%); }
 body {
     font-family: var(--font); color: var(--c-text); background: var(--c-bg);
     display: flex; flex-direction: column; overflow: hidden; -webkit-font-smoothing: antialiased;
@@ -40,17 +41,19 @@ body {
 /* ── Header ── */
 .header {
     min-height: 92px; flex-shrink: 0; background: var(--c-surface); border-bottom: 1px solid var(--c-border);
-    display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; gap: 12px; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between; padding: 10px clamp(12px, 1.05vw, 20px); gap: 10px 14px; z-index: 20;
+    flex-wrap: wrap;
 }
-.header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-.header-title h1 { font-size: 34px; font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
-.header-title p { font-size: 20px; color: var(--c-text-muted); font-weight: 500; margin-top: 2px; }
-.divider { width: 1px; height: 30px; background: var(--c-border); margin: 0 4px; }
+.header-right { display: flex; align-items: center; gap: clamp(4px, 0.42vw, 8px); flex-wrap: wrap; justify-content: flex-end; }
+.header-title h1 { font-size: clamp(19px, 1.78vw, 34px); white-space: nowrap; font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+.header-title p { font-size: clamp(12px, 1.05vw, 20px); white-space: nowrap; color: var(--c-text-muted); font-weight: 500; margin-top: 2px; }
+.divider { width: 1px; height: 30px; background: var(--c-border); margin: 0 clamp(1px, 0.2vw, 4px); }
 
 /* ── Buttons ── */
 .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-    padding: 10px 16px; border-radius: 9px; font-size: 15px; font-weight: 700;
+    padding: clamp(6px, 0.55vw, 10px) clamp(7px, 0.72vw, 16px); border-radius: 9px;
+    font-size: clamp(11.5px, 0.8vw, 15px); font-weight: 700;
     font-family: var(--font); border: 1px solid var(--c-border); background: var(--c-surface);
     color: var(--c-text-sec); cursor: pointer; transition: all 0.15s; white-space: nowrap; user-select: none;
 }
@@ -66,17 +69,28 @@ body {
 .sidebar {
     width: var(--sidebar-w); background: var(--c-surface); border-right: 1px solid var(--c-border);
     display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; scrollbar-width: thin;
+    container-type: inline-size;
 }
-.sidebar-section { padding: 16px 22px; }
+.sidebar-section { padding: 16px clamp(14px, 3.2cqi, 22px); }
 .sidebar-section + .sidebar-section { border-top: 1px solid #f1f5f9; }
 .sidebar-section.grow { flex: 1; display: flex; flex-direction: column; min-height: 400px; }
 .section-head { margin-bottom: 10px; line-height: 1.35; }
-.section-label { font-size: 21px; font-weight: 800; color: var(--c-text-muted); letter-spacing: -0.01em; }
+.section-head.with-tools { display: flex; align-items: center; justify-content: space-between; gap: 6px 10px; flex-wrap: wrap; }
+.edit-tools { display: flex; gap: 6px; margin-left: auto; }
+.mini-btn {
+    display: inline-flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 8px;
+    border: 1px solid var(--c-border); background: #fff; color: var(--c-text-sec); cursor: pointer;
+    font-family: var(--font); font-size: clamp(12px, 2cqi, 14px); font-weight: 700; white-space: nowrap;
+    touch-action: manipulation;
+}
+.mini-btn:hover { background: #f8fafc; border-color: var(--c-border-hover); }
+.mini-btn:active { transform: scale(0.96); }
+.section-label { font-size: clamp(14px, 3.05cqi, 21px); font-weight: 800; color: var(--c-text-muted); letter-spacing: -0.01em; }
 
 .field-row { display: flex; gap: 8px; }
 .field {
     width: 100%; background: #f8fafc; border: 1px solid var(--c-border); border-radius: var(--radius);
-    padding: 11px 14px; font-family: var(--font); font-size: 18.75px; color: var(--c-text); outline: none;
+    padding: 11px 14px; font-family: var(--font); font-size: clamp(15px, 2.73cqi, 18.75px); color: var(--c-text); outline: none;
     transition: border-color 0.2s;
 }
 .field:focus { border-color: var(--c-primary); background: #fff; }
@@ -85,7 +99,7 @@ body {
 
 .code-input {
     flex: 1; width: 100%; background: #f8fafc; border: 1px solid var(--c-border); border-radius: var(--radius);
-    padding: 14px 16px; font-family: var(--font); font-size: 20.25px; line-height: 1.75;
+    padding: 14px 16px; font-family: var(--font); font-size: clamp(16px, 2.94cqi, 20.25px); line-height: 1.75;
     color: var(--c-text); outline: none; resize: none; transition: border-color 0.2s; scrollbar-width: thin;
     min-height: 320px;
 }
@@ -107,8 +121,8 @@ body {
     background: var(--c-primary-light); border: 1px solid var(--c-primary-border);
     border-radius: 14px; padding: 16px 18px 10px;
 }
-.guide-box h4 { font-size: 22px; font-weight: 800; color: var(--c-primary); margin-bottom: 10px; }
-.guide-box li { font-size: 21px; color: var(--c-text-sec); line-height: 1.6; font-weight: 500; margin-left: 26px; margin-bottom: 8px; }
+.guide-box h4 { font-size: clamp(15px, 3.2cqi, 22px); font-weight: 800; color: var(--c-primary); margin-bottom: 10px; }
+.guide-box li { font-size: clamp(13.5px, 3.05cqi, 21px); color: var(--c-text-sec); line-height: 1.6; font-weight: 500; margin-left: 26px; margin-bottom: 8px; }
 .guide-box b { color: var(--c-text); }
 .privacy-note {
     margin-top: 10px; font-size: 10.5px; color: var(--c-text-sec); line-height: 1.6; font-weight: 500;
@@ -121,22 +135,18 @@ kbd {
 
 /* ── Canvas panel ── */
 .canvas-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.canvas-toolbar {
-    height: 60px; flex-shrink: 0; background: var(--c-surface); border-bottom: 1px solid var(--c-border);
-    display: flex; align-items: center; gap: 16px; padding: 0 16px; overflow-x: auto; scrollbar-width: none;
-}
-.toolbar-label { font-size: 13px; font-weight: 800; color: var(--c-text-muted); white-space: nowrap; }
-.segmented { display: inline-flex; background: #f1f5f9; border-radius: 11px; padding: 4px; gap: 3px; }
+.segmented { display: inline-flex; background: #f1f5f9; border-radius: 10px; padding: 3px; gap: 2px; }
 .segmented button {
-    border: none; background: transparent; font-family: var(--font); font-size: 14.5px; font-weight: 700;
-    color: var(--c-text-sec); padding: 7px 14px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+    border: none; background: transparent; font-family: var(--font); font-size: clamp(11.5px, 0.8vw, 15px); font-weight: 700;
+    color: var(--c-text-sec); padding: clamp(5px, 0.42vw, 7px) clamp(6px, 0.62vw, 13px); border-radius: 8px; cursor: pointer; white-space: nowrap;
     display: inline-flex; align-items: center; gap: 6px;
 }
 .segmented button.active { background: #fff; color: var(--c-text); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
 .seg-icon { display: inline-block; border: 1.5px solid currentColor; border-radius: 2px; }
 
 .pending {
-    position: relative; overflow: hidden; display: none; align-items: center; gap: 8px;
+    position: absolute; top: 12px; right: 14px; z-index: 5; box-shadow: var(--shadow-md);
+    overflow: hidden; display: none; align-items: center; gap: 8px;
     padding: 8px 14px; border-radius: 999px; border: 1px solid var(--c-primary-border);
     background: var(--c-primary-light); color: var(--c-text-sec); font-family: var(--font);
     font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap;
@@ -147,7 +157,7 @@ kbd {
 @keyframes pblink { 50% { opacity: 0.25; } }
 .canvas-area {
     flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center;
-    padding: 24px; background: var(--c-bg); position: relative;
+    padding: clamp(10px, 1vw, 24px); background: var(--c-bg); position: relative;
 }
 #chainCanvas { background: #fff; box-shadow: var(--shadow-canvas); border: 1px solid var(--c-border); display: block; }
 
@@ -212,14 +222,25 @@ kbd { font-size: 0.9em; }
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-@media (max-width: 1280px) { .header-right .btn span.lbl { display: none; } }
-@media (max-width: 900px) {
-    body { overflow: auto; }
-    .header { flex-wrap: wrap; }
-    .workspace { flex-direction: column; overflow: visible; }
-    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--c-border); }
-    .canvas-panel { min-height: 80vh; }
+/* 태블릿 가로 등 좁은 가로 화면: 왼쪽 보드는 화면의 1/3 */
+@media (max-width: 1300px) and (orientation: landscape) {
+    :root { --sidebar-w: clamp(320px, 34vw, 688px); }
+}
+/* 세로 화면 (태블릿 세로): 그림 위, 입력 아래 */
+@media (orientation: portrait) and (max-width: 1100px) {
+    .workspace { flex-direction: column; }
+    .canvas-panel { order: -1; flex: 0 0 46%; min-height: 0; }
+    .canvas-area { padding: 12px; }
+    .sidebar { width: 100%; flex: 1; min-height: 0; border-right: none; border-top: 1px solid var(--c-border); }
+    .sidebar-section.grow { min-height: 260px; }
+    .header-right { width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 4px; }
+    .header-right .divider { display: none; }
+    .seg-icon { display: none !important; }
+    .code-input { min-height: 200px; }
+}
+@media (max-width: 760px) {
     .modal-body { grid-template-columns: 1fr; }
+    .header-right { flex-wrap: wrap; justify-content: flex-start; }
 }
 </style>
 </head>
@@ -232,6 +253,12 @@ kbd { font-size: 0.9em; }
         <p>문의: 32robin@naver.com 🛠️</p>
     </div>
     <div class="header-right">
+        <div class="segmented" id="sizeSeg" title="캔버스 크기">
+            <button data-size="square"><i class="seg-icon" style="width:13px;height:13px"></i>정사각형</button>
+            <button data-size="a4p"><i class="seg-icon" style="width:11px;height:15px"></i>A4 세로</button>
+            <button data-size="a4l"><i class="seg-icon" style="width:15px;height:11px"></i>A4 가로</button>
+        </div>
+        <div class="divider"></div>
         <button class="btn btn-blue" onclick="openHelp()" title="사용법과 유의사항 보기">❔ <span class="lbl">도움말 페이지</span></button>
         <div class="divider"></div>
         <button class="btn" onclick="newChain()" title="빈 체인으로 새로 작성">📄 <span class="lbl">새로 작성</span></button>
@@ -256,7 +283,12 @@ kbd { font-size: 0.9em; }
         </div>
 
         <div class="sidebar-section grow">
-            <div class="section-head"><span class="section-label">체인 작성 보드("체인 분류: 체인 내용" 규칙으로 한 줄씩 작성)</span></div>
+            <div class="section-head with-tools"><span class="section-label">체인 작성 보드("체인 분류: 체인 내용" 규칙으로 한 줄씩 작성)</span>
+                <div class="edit-tools">
+                    <button class="mini-btn" id="undoBtn" title="되돌리기 (Ctrl+Z)">↶ 되돌리기</button>
+                    <button class="mini-btn" id="redoBtn" title="다시 하기 (Ctrl+Y)">↷ 다시 하기</button>
+                </div>
+            </div>
             <textarea id="chainInput" class="code-input" spellcheck="false"
                 placeholder="취약성: 평소보다 더 우울했던 날&#10;촉발사건: 늦은 밤, 잠이 오지 않음&#10;생각: 술을 마시면 잠들 수 있을 거야&#10;감정: 짜증&#10;행동: 냉장고에서 술을 꺼냄&#10;목표행동: 술을 마심&#10;결과: 일시적 안도감"></textarea>
         </div>
@@ -281,20 +313,11 @@ kbd { font-size: 0.9em; }
     </aside>
 
     <main class="canvas-panel">
-        <div class="canvas-toolbar">
-            <span class="toolbar-label">캔버스</span>
-            <div class="segmented" id="sizeSeg">
-                <button data-size="square"><i class="seg-icon" style="width:13px;height:13px"></i>정사각형</button>
-                <button data-size="a4p"><i class="seg-icon" style="width:11px;height:15px"></i>A4 세로</button>
-                <button data-size="a4l"><i class="seg-icon" style="width:15px;height:11px"></i>A4 가로</button>
-            </div>
-            <div style="flex:1"></div>
+        <div class="canvas-area" id="canvasArea">
+            <canvas id="chainCanvas"></canvas>
             <button class="pending" id="pendingPill" title="지금 바로 그림에 반영 (Ctrl+Enter)">
                 <span class="pdot"></span>입력 중 · 잠시 후 그림에 반영 <b>지금 반영</b>
             </button>
-        </div>
-        <div class="canvas-area" id="canvasArea">
-            <canvas id="chainCanvas"></canvas>
         </div>
     </main>
 </div>
@@ -924,7 +947,8 @@ function kick() {
 // ════════════════════════════════════════
 function fitCanvas() {
     const { W, H } = SIZES[state.size];
-    const aw = Math.max(100, area.clientWidth - 48), ah = Math.max(100, area.clientHeight - 48);
+    const cs = getComputedStyle(area), px = parseFloat(cs.paddingLeft) * 2 + 2;
+    const aw = Math.max(100, area.clientWidth - px), ah = Math.max(100, area.clientHeight - px);
     const sc = Math.max(0.15, Math.min(aw / W, ah / H));
     const dpr = window.devicePixelRatio || 1;
     cv.style.width = Math.round(W * sc) + 'px';
@@ -1173,6 +1197,31 @@ ta.addEventListener('keydown', e => {
     $(id).addEventListener('blur', () => { if (commitTimer) commitNow(); });
 });
 $('pendingPill').addEventListener('click', commitNow);
+
+// 화면 버튼으로 되돌리기·다시 하기 (터치 기기용) — 입력 칸 포커스를 유지한 채 실행
+function doHistory(cmd) {
+    if (document.activeElement !== ta) ta.focus();
+    let ok = false;
+    try { ok = document.execCommand(cmd); } catch (_) {}
+    if (!ok) toast(cmd === 'undo' ? '더 되돌릴 내용이 없습니다' : '다시 할 내용이 없습니다');
+}
+[['undoBtn', 'undo'], ['redoBtn', 'redo']].forEach(([id, cmd]) => {
+    const b = $(id);
+    b.addEventListener('pointerdown', e => e.preventDefault());
+    b.addEventListener('mousedown', e => e.preventDefault());
+    b.addEventListener('click', () => doHistory(cmd));
+});
+
+// 태블릿: 화면 키보드가 올라오면 보이는 영역에 맞춰 화면 높이 조정
+if (window.visualViewport && window.matchMedia('(pointer: coarse)').matches) {
+    const vv = window.visualViewport;
+    const fitVV = () => {
+        document.documentElement.style.setProperty('--app-h', Math.round(vv.height) + 'px');
+        if (window.scrollY) window.scrollTo(0, 0);
+    };
+    vv.addEventListener('resize', fitVV);
+    fitVV();
+}
 
 function hitTest(e) {
     const rect = cv.getBoundingClientRect();
