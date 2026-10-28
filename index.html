@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>체인분석 작성하기</title>
+<title>DBT 체인분석 작성하기🖊️</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root {
@@ -135,6 +135,16 @@ kbd {
 .segmented button.active { background: #fff; color: var(--c-text); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
 .seg-icon { display: inline-block; border: 1.5px solid currentColor; border-radius: 2px; }
 
+.pending {
+    position: relative; overflow: hidden; display: none; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px; border: 1px solid var(--c-primary-border);
+    background: var(--c-primary-light); color: var(--c-text-sec); font-family: var(--font);
+    font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.pending.on { display: inline-flex; }
+.pending b { color: var(--c-primary); font-weight: 800; margin-left: 2px; }
+.pending .pdot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-primary); animation: pblink 1s ease-in-out infinite; }
+@keyframes pblink { 50% { opacity: 0.25; } }
 .canvas-area {
     flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center;
     padding: 24px; background: var(--c-bg); position: relative;
@@ -218,8 +228,8 @@ kbd { font-size: 0.9em; }
 <!-- ═══════════ HEADER ═══════════ -->
 <header class="header">
     <div class="header-title">
-        <h1>🖊️DBT 체인분석 작성하기</h1>
-        <p>🛠️문의: 32robin@naver.com</p>
+        <h1>DBT 체인분석 작성하기 🖊️</h1>
+        <p>문의: 32robin@naver.com 🛠️</p>
     </div>
     <div class="header-right">
         <button class="btn btn-blue" onclick="openHelp()" title="사용법과 유의사항 보기">❔ <span class="lbl">도움말 페이지</span></button>
@@ -265,6 +275,7 @@ kbd { font-size: 0.9em; }
                     <li>체인 분류 색상: <b style="color:var(--c-thought)">생각</b> · <b style="color:var(--c-emotion)">감정</b> · <b style="color:var(--c-behavior)">행동</b> · <b style="color:var(--c-body)">신체감각</b> · <b style="color:var(--c-event)">사건</b></li>
                     <li><b>취약성 · 촉발사건 · 목표행동 · 결과</b>는 강조 체인으로 표시됩니다.</li>
                     <li>오른쪽 그림의 체인을 클릭하면 해당 줄로 이동합니다.</li>
+                    <li>그림은 입력을 멈추고 <b>3초 뒤</b>에 반영됩니다. <kbd>Enter</kbd>로 줄을 마치거나 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>를 누르면 바로 반영됩니다.</li>
                     <li>되돌리기 <kbd>Ctrl</kbd>+<kbd>Z</kbd> · 다시 하기 <kbd>Ctrl</kbd>+<kbd>Y</kbd></li>
                 </ul>
             </div>
@@ -280,6 +291,10 @@ kbd { font-size: 0.9em; }
                 <button data-size="a4p"><i class="seg-icon" style="width:11px;height:15px"></i>A4 세로</button>
                 <button data-size="a4l"><i class="seg-icon" style="width:15px;height:11px"></i>A4 가로</button>
             </div>
+            <div style="flex:1"></div>
+            <button class="pending" id="pendingPill" title="지금 바로 그림에 반영 (Ctrl+Enter)">
+                <span class="pdot"></span>입력 중 · 잠시 후 그림에 반영 <b>지금 반영</b>
+            </button>
         </div>
         <div class="canvas-area" id="canvasArea">
             <canvas id="chainCanvas"></canvas>
@@ -311,7 +326,7 @@ kbd { font-size: 0.9em; }
                     <h3>✍️ 사용법</h3>
                     <ol class="steps">
                         <li>왼쪽 칸에 <b>체인 분류: 체인 내용</b>을 한 줄씩 씁니다.</li>
-                        <li>한 줄을 쓸 때마다 오른쪽에 그림이 <b>바로</b> 그려집니다.</li>
+                        <li>줄을 마치면(Enter) 오른쪽에 그림이 그려집니다. 쓰는 중에는 <b>3초</b> 쉬면 반영됩니다.</li>
                         <li>빈 줄(Enter)은 <b>빈 칸</b>이 됩니다.</li>
                         <li>다 쓰면 <b>JPG 저장</b>(그림), <b>JSON 저장</b>(작성 내용)을 누릅니다.</li>
                     </ol>
@@ -577,6 +592,7 @@ function baseSize(nd) {
     // 가장 긴 단어가 한 줄에 들어갈 만큼은 넓게 → 노드마다 글자 크기가 고르게
     let w = Math.max(clamp(118 + len * 3.1, 148, 240), Math.min(240, 72 + longest * 17));
     let h = len > 38 ? 102 : 90;
+    w = Math.round(w / 20) * 20;          // 20단위 계단: 한두 글자 고쳐도 크기 그대로
     if (nd.cat && nd.cat.kind === 'key') { w *= 1.06; h *= 1.06; }
     return { w, h };
 }
@@ -630,6 +646,7 @@ function placeNodes(base, kx, ky, path) {
 const READ_H = 125;      // 읽기 좋은 노드 최소 높이 (1000 기준 캔버스 단위)
 const layoutCache = new Map();
 let lastRows = 3;
+let sticky = null;
 
 function computeLayout(W, H) {
     const s = Math.min(W, H) / 1000;
@@ -683,9 +700,16 @@ function computeLayout(W, H) {
         return best;
     };
 
+    // 체인 개수·캔버스·제목 높이가 같으면 직전 배치 틀을 그대로 사용 (내용만 고친 경우 흔들림 최소화)
+    const stickKey = [W, H, Math.round(hd.h), nodes.length].join('|');
+    let best = null;
+    if (sticky && sticky.key === stickKey) {
+        const r = trial(sticky.R, sticky.k, sticky.a, sticky.f);
+        if (r.fits) { r.medH = median(r.t.map(n => n.h)) / s; best = r; }
+    }
     // 같은 조건이면 이전 계산 결과 재사용
     const key = [W, H, Math.round(hd.h), base.map(b => b.w.toFixed(0) + 'x' + b.h.toFixed(0)).join(',')].join('|');
-    let best = layoutCache.get(key);
+    if (!best) best = layoutCache.get(key);
     if (!best) {
         const memo = new Map();
         const evalR = R => { if (!memo.has(R)) memo.set(R, bestForRows(R)); return memo.get(R); };
@@ -725,6 +749,7 @@ function computeLayout(W, H) {
         layoutCache.set(key, best);
     }
     lastRows = best.R;
+    sticky = { key: stickKey, R: best.R, k: best.k, a: best.a, f: best.f };
 
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
     best.t.forEach(n => {
@@ -748,18 +773,20 @@ function textLayout(ctx, nd, w, h) {
     const r = Math.min(h * 0.48, w / 2);
     const padX = Math.max(r * 0.5, w * 0.07), padY = h * 0.1;
     const tw = w - 2 * padX, th = h - 2 * padY;
-    const ft = clamp(h * (isKey ? 0.132 : 0.121), 7.7, isKey ? 18 : 17);
-    const titleH = nd.title ? ft * 1.45 : 0;
     const weight = cat && cat.key === 'target' ? 700 : 500;
     let fb = clamp(h * 0.165, 8.25, 21);
-    let ls = [];
+    let ls = [], titleH = 0;
     const fbFloor = Math.max(7.5, h * 0.11);   // 단어가 끊기면 이 크기까지는 글자를 줄여 본다
     for (;;) {
+        // 체인 분류(제목)도 체인 내용과 같은 글자 크기
+        titleH = nd.title ? fb * 1.38 : 0;
+        ctx.font = font(800, fb);
+        const titleFits = !nd.title || ctx.measureText(nd.title).width <= tw;
         ctx.font = font(weight, fb);
         wrapText.broke = false;
         ls = nd.content ? wrapText(ctx, nd.content, tw) : [];
         const fitsH = titleH + ls.length * fb * 1.3 <= th;
-        if ((fitsH && (!wrapText.broke || fb <= fbFloor)) || fb <= 7.5) break;
+        if ((fitsH && titleFits && (!wrapText.broke || fb <= fbFloor)) || fb <= 7.5) break;
         fb -= 0.5;
     }
     const maxLines = Math.max(1, Math.floor((th - titleH) / (fb * 1.3)));
@@ -768,6 +795,7 @@ function textLayout(ctx, nd, w, h) {
         ctx.font = font(weight, fb);
         ls[maxLines - 1] = ellipsize(ctx, ls[maxLines - 1] + '…', tw);
     }
+    const ft = fb;
     ctx.font = font(800, ft);
     const title = nd.title ? ellipsize(ctx, nd.title, tw) : '';
     const res = { ft, fb, weight, titleH, lines: ls, title };
@@ -926,16 +954,38 @@ function lineStart(i) {
     for (let k = 0; k < i && k < ls.length; k++) p += ls[k].length + 1;
     return p;
 }
-let layoutQueued = false;
-function onTextChange() {
+// ── 그림 반영 시점 ──
+//  · 글자를 칠 때마다 다시 그리지 않고, 입력을 멈추고 3초가 지나면 한 번에 반영
+//  · 단, Enter(한 줄 완성)·다른 곳 클릭·빠른 추가·불러오기는 바로 반영
+const COMMIT_DELAY = 3000;
+let commitTimer = null;
+function commitNow() {
+    clearTimeout(commitTimer); commitTimer = null;
+    showPending(false);
     const nl = splitLines(ta.value);
     syncItems(nl);
     nodes = nl.map(parseLine);
     updateSelection(false);
-    if (!layoutQueued) {
-        layoutQueued = true;
-        requestAnimationFrame(() => { layoutQueued = false; relayout(); });
-    }
+    relayout();
+}
+function scheduleCommit() {
+    clearTimeout(commitTimer);
+    commitTimer = setTimeout(commitNow, COMMIT_DELAY);
+    showPending(true);
+}
+function showPending(on) {
+    const el = $('pendingPill');
+    if (!on) { el.classList.remove('on'); return; }
+    el.classList.add('on');
+}
+let lastInputType = '';
+function onTextChange(e) {
+    const t = e && e.inputType;
+    // Enter로 줄을 마치거나, 붙여넣기·줄 삭제처럼 줄 구조가 바뀌면 바로 반영
+    if (t === 'insertLineBreak' || t === 'insertParagraph' || t === 'insertFromPaste' ||
+        t === 'historyUndo' || t === 'historyRedo' || !t) { commitNow(); return; }
+    if (splitLines(ta.value).length !== lines.length && (t || '').startsWith('delete')) { commitNow(); return; }
+    scheduleCommit();
 }
 function updateSelection(redraw = true) {
     const li = document.activeElement === ta ? lineOf(ta.selectionStart) : -1;
@@ -974,6 +1024,7 @@ function insertCat(label) {
     if (v.trim() === '') replaceRange(0, v.length, label + ': ');
     else if (ls[li].trim() === '') replaceRange(st, en, label + ': ');
     else replaceRange(en, en, '\n' + label + ': ');
+    commitNow();
     updateSelection();
 }
 
@@ -1023,6 +1074,7 @@ function loadJSONFile(file) {
     reader.readAsText(file, 'utf-8');
 }
 function saveJPG() {
+    if (commitTimer) commitNow();
     const { W, H } = SIZES[state.size];
     const lay = computeLayout(W, H);
     const rest = lay.targets.map(t => ({ x: t.x + lay.ox, y: t.y + lay.oy, w: t.w, h: t.h, alpha: 1, scale: 1 }));
@@ -1042,7 +1094,7 @@ function setContent(text, title, memo) {
     $('titleInput').value = title;
     $('memoInput').value = memo;
     if (ta.value !== text) replaceRange(0, ta.value.length, text);   // Ctrl+Z로 되돌릴 수 있게
-    else relayout();
+    commitNow();
     ta.setSelectionRange(0, 0); ta.scrollTop = 0;
     ta.blur();
     state.selected = -1;
@@ -1106,6 +1158,10 @@ function buildChips() {
 }
 
 ta.addEventListener('input', onTextChange);
+ta.addEventListener('blur', () => { if (commitTimer) commitNow(); });   // 다른 곳을 누르면 바로 반영
+ta.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); commitNow(); }
+});
 ['keyup', 'click', 'focus', 'blur'].forEach(ev => ta.addEventListener(ev, () => updateSelection()));
 document.addEventListener('selectionchange', () => { if (document.activeElement === ta) updateSelection(); });
 ta.addEventListener('keydown', e => {
@@ -1115,7 +1171,11 @@ ta.addEventListener('keydown', e => {
         try { document.execCommand('redo'); } catch (_) {}
     }
 });
-['titleInput', 'memoInput'].forEach(id => $(id).addEventListener('input', relayout));
+['titleInput', 'memoInput'].forEach(id => {
+    $(id).addEventListener('input', scheduleCommit);
+    $(id).addEventListener('blur', () => { if (commitTimer) commitNow(); });
+});
+$('pendingPill').addEventListener('click', commitNow);
 
 function hitTest(e) {
     const rect = cv.getBoundingClientRect();
