@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>체인분석 작성페이지</title>
+<title>체인분석 작성하기</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root {
@@ -218,8 +218,8 @@ kbd { font-size: 0.9em; }
 <!-- ═══════════ HEADER ═══════════ -->
 <header class="header">
     <div class="header-title">
-        <h1>체인분석 작성페이지</h1>
-        <p>문의: 32robin@naver.com</p>
+        <h1>🖊️DBT 체인분석 작성하기</h1>
+        <p>🛠️문의: 32robin@naver.com</p>
     </div>
     <div class="header-right">
         <button class="btn btn-blue" onclick="openHelp()" title="사용법과 유의사항 보기">❔ <span class="lbl">도움말 페이지</span></button>
@@ -246,13 +246,13 @@ kbd { font-size: 0.9em; }
         </div>
 
         <div class="sidebar-section grow">
-            <div class="section-head"><span class="section-label">체인 작성 · 한 줄 = 노드 하나 ("노드명: 내용")</span></div>
+            <div class="section-head"><span class="section-label">체인 작성 보드("체인 분류: 체인 내용" 규칙으로 한 줄씩 작성)</span></div>
             <textarea id="chainInput" class="code-input" spellcheck="false"
                 placeholder="취약성: 평소보다 더 우울했던 날&#10;촉발사건: 늦은 밤, 잠이 오지 않음&#10;생각: 술을 마시면 잠들 수 있을 거야&#10;감정: 짜증&#10;행동: 냉장고에서 술을 꺼냄&#10;목표행동: 술을 마심&#10;결과: 일시적 안도감"></textarea>
         </div>
 
         <div class="sidebar-section">
-            <div class="section-head"><span class="section-label">빠른 추가 · 클릭하면 현재 줄 아래에 새 노드</span></div>
+            <div class="section-head"><span class="section-label">빠른 추가 · 클릭하면 현재 줄 아래에 새 체인</span></div>
             <div class="chip-grid" id="chipGrid"></div>
         </div>
 
@@ -260,11 +260,11 @@ kbd { font-size: 0.9em; }
             <div class="guide-box">
                 <h4>작성 규칙</h4>
                 <ul>
-                    <li><b>노드명: 내용</b> 형식으로 한 줄씩 씁니다. 줄을 추가하면 노드가 바로 추가됩니다.</li>
+                    <li><b>체인 분류: 체인 내용</b> 형식으로 한 줄씩 씁니다. 줄을 추가하면 체인이 바로 추가됩니다.</li>
                     <li>빈 줄(Enter)은 <b>빈 칸</b>이 됩니다. 연결을 건너뛴 곳은 빈 칸으로 둡니다.</li>
-                    <li>노드명 색상: <b style="color:var(--c-thought)">생각</b> · <b style="color:var(--c-emotion)">감정</b> · <b style="color:var(--c-behavior)">행동</b> · <b style="color:var(--c-body)">신체감각</b> · <b style="color:var(--c-event)">사건</b></li>
-                    <li><b>취약성 · 촉발사건 · 목표행동 · 결과</b>는 강조 노드로 표시됩니다.</li>
-                    <li>오른쪽 그림의 노드를 클릭하면 해당 줄로 이동합니다.</li>
+                    <li>체인 분류 색상: <b style="color:var(--c-thought)">생각</b> · <b style="color:var(--c-emotion)">감정</b> · <b style="color:var(--c-behavior)">행동</b> · <b style="color:var(--c-body)">신체감각</b> · <b style="color:var(--c-event)">사건</b></li>
+                    <li><b>취약성 · 촉발사건 · 목표행동 · 결과</b>는 강조 체인으로 표시됩니다.</li>
+                    <li>오른쪽 그림의 체인을 클릭하면 해당 줄로 이동합니다.</li>
                     <li>되돌리기 <kbd>Ctrl</kbd>+<kbd>Z</kbd> · 다시 하기 <kbd>Ctrl</kbd>+<kbd>Y</kbd></li>
                 </ul>
             </div>
@@ -298,7 +298,7 @@ kbd { font-size: 0.9em; }
             <section class="help-col">
                 <div>
                     <h3>🔗 체인분석이란?</h3>
-                    <p>체인분석은 목표행동이 일어나기까지 이어진 사건·생각·감정·신체감각·행동을 순간 단위로 하나하나 사슬처럼 재구성하는 변증법행동치료(DBT) 핵심 행동분석 기법입니다.</p>
+                    <p>체인분석은 목표행동 전후의 생각·감정·행동 등을 각각 사슬처럼 재구성하는 변증법행동치료(DBT)의 핵심 행동분석 방법입니다.</p>
                     <div class="flow">
                         <span class="n">취약성</span><span class="arr">→</span>
                         <span class="n key">촉발사건</span><span class="arr">→</span>
@@ -310,7 +310,7 @@ kbd { font-size: 0.9em; }
                 <div>
                     <h3>✍️ 사용법</h3>
                     <ol class="steps">
-                        <li>왼쪽 칸에 <b>노드명: 내용</b>을 한 줄씩 씁니다.</li>
+                        <li>왼쪽 칸에 <b>체인 분류: 체인 내용</b>을 한 줄씩 씁니다.</li>
                         <li>한 줄을 쓸 때마다 오른쪽에 그림이 <b>바로</b> 그려집니다.</li>
                         <li>빈 줄(Enter)은 <b>빈 칸</b>이 됩니다.</li>
                         <li>다 쓰면 <b>JPG 저장</b>(그림), <b>JSON 저장</b>(작성 내용)을 누릅니다.</li>
@@ -329,7 +329,7 @@ kbd { font-size: 0.9em; }
                     <h3>⚠️ 유의사항</h3>
                     <div class="caution">
                         <ol>
-                            <li><b>체인분석은 상담자와 내담자가 함께 하는 치료기법입니다.</b> <u>상담에 방해되지 않도록 키보드 소리를 작게 하고, 내담자와 함께 공동으로 작성하세요.</u></li>
+                            <li>체인분석은 상담자와 내담자가 함께 하는 치료기법입니다. <b>대화에 방해되지 않도록 키보드 소리를 작게 하고, 함께 협력하여 작성합니다.</b></li>
                             <li><b>작성 내용은 서버에 저장되지 않으며, PC에도 자동 저장되지 않습니다.</b> 창을 닫기 전에 현재까지 작성한 내용을 JSON파일 형식으로 저장해두고, 저장된 파일을 불러올 수 있습니다.</li>
                         </ol>
                     </div>
@@ -380,7 +380,7 @@ const norm = s => s.toLowerCase().replace(/[\s_\-·.]/g, '');
 CATS.forEach(c => c.names.forEach(n => { CAT_INDEX[norm(n)] = c; }));
 
 const EXAMPLE = {
-    title: '예시)내담자 홍길동',
+    title: '예시) 브라이언의 사례',
     memo: '예시)2026.11.11. 2회기',
     text: [
         '취약성: 평소보다 더 우울했음',
@@ -795,7 +795,7 @@ function drawScene(ctx, W, H, layout, list, selected) {
     if (!nodes.length) {
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.font = font(700, 17 * s); ctx.fillStyle = '#94a3b8';
-        ctx.fillText('왼쪽 칸에 "노드명: 내용"을 한 줄씩 입력하면', W / 2, H / 2 - 13 * s);
+        ctx.fillText('왼쪽 칸에 "체인 분류: 체인 내용"을 한 줄씩 입력하면', W / 2, H / 2 - 13 * s);
         ctx.fillText('여기에 체인이 바로 그려집니다', W / 2, H / 2 + 15 * s);
         return;
     }
@@ -814,7 +814,7 @@ function drawScene(ctx, W, H, layout, list, selected) {
         const nd = nodes[i], cat = nd.cat, isKey = !!(cat && cat.kind === 'key'), sel = i === selected;
         rr(ctx, x, y, w, h, Math.min(h * 0.48, w / 2));
         ctx.lineWidth = sel ? 2.8 * s : (cat && cat.strong ? 2.6 * s : isKey ? 2 * s : 1.6 * s);
-        ctx.strokeStyle = sel ? '#2563eb' : (isKey ? '#475569' : '#8b98aa');
+        ctx.strokeStyle = sel ? '#2563eb' : (isKey ? '#475569' : '#a3a8b0');
         if (nd.empty) ctx.setLineDash([6 * s, 5 * s]);
         ctx.stroke();
         ctx.setLineDash([]);
