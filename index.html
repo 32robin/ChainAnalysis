@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DBT 체인분석 작성하기🖊️</title>
+<title>DBT 체인분석 작성하기</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root {
@@ -25,7 +25,7 @@
     --c-body: #7c3aed;
     --c-event: #c2410c;
     --radius: 8px;
-    --sidebar-w: 550px;
+    --sidebar-w: 688px;
     --font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
     --shadow-canvas: 0 8px 40px rgba(0,0,0,0.08);
@@ -67,16 +67,16 @@ body {
     width: var(--sidebar-w); background: var(--c-surface); border-right: 1px solid var(--c-border);
     display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; scrollbar-width: thin;
 }
-.sidebar-section { padding: 14px 20px; }
+.sidebar-section { padding: 16px 22px; }
 .sidebar-section + .sidebar-section { border-top: 1px solid #f1f5f9; }
-.sidebar-section.grow { flex: 1; display: flex; flex-direction: column; min-height: 320px; }
-.section-head { margin-bottom: 8px; }
-.section-label { font-size: 10.5px; font-weight: 800; color: var(--c-text-muted); letter-spacing: -0.01em; }
+.sidebar-section.grow { flex: 1; display: flex; flex-direction: column; min-height: 400px; }
+.section-head { margin-bottom: 10px; line-height: 1.35; }
+.section-label { font-size: 21px; font-weight: 800; color: var(--c-text-muted); letter-spacing: -0.01em; }
 
 .field-row { display: flex; gap: 8px; }
 .field {
     width: 100%; background: #f8fafc; border: 1px solid var(--c-border); border-radius: var(--radius);
-    padding: 8px 10px; font-family: var(--font); font-size: 12.5px; color: var(--c-text); outline: none;
+    padding: 11px 14px; font-family: var(--font); font-size: 18.75px; color: var(--c-text); outline: none;
     transition: border-color 0.2s;
 }
 .field:focus { border-color: var(--c-primary); background: #fff; }
@@ -85,30 +85,30 @@ body {
 
 .code-input {
     flex: 1; width: 100%; background: #f8fafc; border: 1px solid var(--c-border); border-radius: var(--radius);
-    padding: 12px 14px; font-family: var(--font); font-size: 13.5px; line-height: 1.85;
+    padding: 14px 16px; font-family: var(--font); font-size: 20.25px; line-height: 1.75;
     color: var(--c-text); outline: none; resize: none; transition: border-color 0.2s; scrollbar-width: thin;
-    min-height: 260px;
+    min-height: 320px;
 }
 .code-input:focus { border-color: var(--c-primary); background: #fff; }
 .code-input::placeholder { color: var(--c-text-muted); }
 
-.chip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.chip-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .chip {
-    display: flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 8px;
-    border-radius: 9px; border: 1px solid var(--c-border); background: #fff;
-    font-family: var(--font); font-size: 14.5px; font-weight: 800; cursor: pointer; transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 4px;
+    border-radius: 7px; border: 1px solid var(--c-border); background: #fff; white-space: nowrap;
+    font-family: var(--font); font-size: 10.5px; font-weight: 800; cursor: pointer; transition: all 0.12s;
 }
 .chip:hover { background: #f8fafc; border-color: var(--c-border-hover); }
 .chip:active { transform: scale(0.97); }
-.chip .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.chip .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .chip.key { background: #f8fafc; }
 
 .guide-box {
     background: var(--c-primary-light); border: 1px solid var(--c-primary-border);
-    border-radius: 12px; padding: 12px 14px;
+    border-radius: 14px; padding: 16px 18px 10px;
 }
-.guide-box h4 { font-size: 11px; font-weight: 800; color: var(--c-primary); margin-bottom: 6px; }
-.guide-box li { font-size: 10.5px; color: var(--c-text-sec); line-height: 1.75; font-weight: 500; margin-left: 14px; }
+.guide-box h4 { font-size: 22px; font-weight: 800; color: var(--c-primary); margin-bottom: 10px; }
+.guide-box li { font-size: 21px; color: var(--c-text-sec); line-height: 1.6; font-weight: 500; margin-left: 26px; margin-bottom: 8px; }
 .guide-box b { color: var(--c-text); }
 .privacy-note {
     margin-top: 10px; font-size: 10.5px; color: var(--c-text-sec); line-height: 1.6; font-weight: 500;
@@ -251,7 +251,7 @@ kbd { font-size: 0.9em; }
             <div class="section-head"><span class="section-label">회기 정보 (그림 상단에 표시)</span></div>
             <div class="field-row">
                 <input id="titleInput" class="field title-field" placeholder="예) 내담자 홍길동" maxlength="80">
-                <input id="memoInput" class="field" placeholder="예) 2026.11.11. 2회기" maxlength="80" style="max-width:215px">
+                <input id="memoInput" class="field" placeholder="예) 2026.11.11. 2회기" maxlength="80" style="max-width:300px">
             </div>
         </div>
 
@@ -270,16 +270,13 @@ kbd { font-size: 0.9em; }
             <div class="guide-box">
                 <h4>작성 규칙</h4>
                 <ul>
-                    <li><b>체인 분류: 체인 내용</b> 형식으로 한 줄씩 씁니다. 줄을 추가하면 체인이 바로 추가됩니다.</li>
-                    <li>빈 줄(Enter)은 <b>빈 칸</b>이 됩니다. 연결을 건너뛴 곳은 빈 칸으로 둡니다.</li>
+                    <li>입력한 내용은 이 브라우저 안에서만 처리되며 서버로 전송되거나 자동 저장되지 않습니다. 창을 닫기 전에 <b>JSON 저장</b>으로 보관하세요.</li>
+                    <li>그림은 입력을 멈추고 <b>3초 뒤</b>에 반영됩니다. <kbd>Enter</kbd>로 줄을 마치거나 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>를 누르면 바로 반영됩니다. 빈 줄(Enter)은 <b>빈 칸</b>이 됩니다.</li>
                     <li>체인 분류 색상: <b style="color:var(--c-thought)">생각</b> · <b style="color:var(--c-emotion)">감정</b> · <b style="color:var(--c-behavior)">행동</b> · <b style="color:var(--c-body)">신체감각</b> · <b style="color:var(--c-event)">사건</b></li>
-                    <li><b>취약성 · 촉발사건 · 목표행동 · 결과</b>는 강조 체인으로 표시됩니다.</li>
                     <li>오른쪽 그림의 체인을 클릭하면 해당 줄로 이동합니다.</li>
-                    <li>그림은 입력을 멈추고 <b>3초 뒤</b>에 반영됩니다. <kbd>Enter</kbd>로 줄을 마치거나 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>를 누르면 바로 반영됩니다.</li>
                     <li>되돌리기 <kbd>Ctrl</kbd>+<kbd>Z</kbd> · 다시 하기 <kbd>Ctrl</kbd>+<kbd>Y</kbd></li>
                 </ul>
             </div>
-            <div class="privacy-note">🔒 입력한 내용은 이 브라우저 안에서만 처리되며 서버로 전송되거나 자동 저장되지 않습니다. 창을 닫기 전에 <b>JSON 저장</b>으로 보관하세요.</div>
         </div>
     </aside>
 
@@ -395,29 +392,29 @@ const norm = s => s.toLowerCase().replace(/[\s_\-·.]/g, '');
 CATS.forEach(c => c.names.forEach(n => { CAT_INDEX[norm(n)] = c; }));
 
 const EXAMPLE = {
-    title: '예시) 사샤의 사례',
+    title: '예시) 영희의 사례',
     memo: '예시)2026.11.11. 2회기',
     text: [
-        '취약성: 평소보다 더 우울했음',
-        '촉발사건: 어젯밤 9시, "피곤하고 자고 싶다. 술을 마시면 잠들 수 있을 거야"',
-        '생각: 브라이언이 빨리 가면 술 마시고 잘 수 있을 텐데',
-        '행동: 브라이언에게 "내일 일찍 출근해야 하지 않아?"라고 말함',
-        '사건: 브라이언이 아직 일어나고 싶지 않다고 말함',
-        '감정: 짜증, 혐오감',
-        '행동: 부엌에서 시끄럽게 설거지를 시작함',
-        '생각: 그가 정말 가 줬으면 좋겠다',
-        '감정: 분노',
-        '행동: 브라이언과 20분 동안 다툼',
-        '감정: 강한 분노, 수치심, 슬픔',
-        '사건: 브라이언이 떠남',
-        '감정: 안도감',
-        '생각: 다행이다, 드디어 갔네',
-        '행동: 보드카 병과 샷잔을 꺼냄',
-        '행동: 소파에 앉아 첫 잔을 따름',
-        '목표행동: 어젯밤 10시, 약 1시간 동안 보드카 약 8잔을 마심 (3잔은 샷잔으로, 나머지는 병째)',
-        '결과: 안도감, 약간의 흥분',
-        '결과: 결국 무감각해짐',
-        '결과: 신체적 불편감 (두통, 멍함, 메스꺼움)',
+        '취약성: 일주일째 야근으로 하루 4~5시간밖에 못 잠',
+        '촉발사건: 밤 10시 퇴근길, 엄마에게서 "언제 결혼할 거니?" 전화가 옴',
+        '생각: 또 시작이네, 빨리 끊고 싶다',
+        '행동: "바빠, 나중에 얘기해"라고 짧게 대답함',
+        '사건: 엄마가 "너 그러다 혼자 늙는다"며 계속 이야기함',
+        '감정: 짜증, 서운함',
+        '신체감각: 어깨가 굳고 가슴이 답답함',
+        '행동: 대답 없이 전화를 끊어 버림',
+        '생각: 나는 왜 엄마한테 늘 이렇게밖에 못 할까',
+        '감정: 죄책감, 수치심',
+        '행동: 집에 와서 친구에게 카톡을 보냈지만 답이 없음',
+        '생각: 아무도 내 편이 없다',
+        '감정: 외로움, 슬픔',
+        '생각: 한 잔만 마시면 좀 괜찮아질 거야',
+        '행동: 집 앞 편의점에서 소주 3병과 맥주 4캔을 삼',
+        '행동: 혼자 식탁에 앉아 첫 잔을 따름',
+        '목표행동: 밤 11시부터 약 2시간 동안 소주 3병과 맥주 2캔을 마심',
+        '결과: 잠깐 마음이 풀리고 엄마 생각이 덜 남',
+        '결과: 새벽에 엄마에게 화난 메시지를 보냄 (다음 날 후회)',
+        '결과: 다음 날 숙취로 지각, 두통과 메스꺼움',
     ].join('\n'),
 };
 
